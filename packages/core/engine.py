@@ -57,11 +57,14 @@ class Engine:
     def schedule(self) -> List[Tuple[Agent, Task]]:
         scheduled_tasks: List[Tuple[Agent, Task]] = []
         for task in self.tasks:
-            agent = self.get_suitable_agent(task)
-            if agent:
-                scheduled_tasks.append((agent, task))
-            else:
-                raise SchedulingException(f"No suitable agent found for task {task.id}")
+            try:
+                agent = self.get_suitable_agent(task)
+                if agent:
+                    scheduled_tasks.append((agent, task))
+                else:
+                    raise SchedulingException(f"No suitable agent found for task {task.id}")
+            except Exception as e:
+                logging.error(f"Error scheduling task {task.id}: {str(e)}")
         return scheduled_tasks
 
     def get_suitable_agent(self, task: Task) -> Agent:
