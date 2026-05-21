@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "agent-pool-orchestrator"
+version = "0.1.0"
+description = "Distributed agent orchestration framework"
+authors = ["AI Architect <contact@example.com>"]
+license = "MIT"
+packages = [{include = "agent_pool"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.68.0"
+sanic = "^22.9.0"
+h3ron = "^2.0.3"
+cricket = "^0.4.2"
+asyncpg = "^0.27.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.3.1"
+black = "^23.7.0"
+pylint = "^3.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.5"]
