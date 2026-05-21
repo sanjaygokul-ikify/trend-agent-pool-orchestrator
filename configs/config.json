@@ -1,0 +1,9 @@
+{
+  "trend_agent": {
+    "max_instances": 10,
+    "min_instances": 1
+  },
+  "pool_orchestrator": {
+    "monitor_interval": 30
+  }
+}
