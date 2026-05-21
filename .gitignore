@@ -1,0 +1,1 @@
+__pycache__/\n*.pyc\n*.pyo\n*.pyd\n*.db\n*.env\n.env\n.vscode\n.idea\n*.log\n*.coverage\n*.cache\n*.bak\n*.swp\n*~\n\n# Docker\n.docker\n\n# VSCode\n.vscode/
