@@ -12,7 +12,14 @@ class Executor:
                 logging.info(f"Executing task {task.id} with agent {agent.id}")
                 # Simulating task execution
                 import time
-                time.sleep(1)
+                task_execution_timeout = 5  # seconds
+                start_time = time.time()
+                while time.time() - start_time < task_execution_timeout:
+                    # Simulate task execution with a sleep
+                    time.sleep(0.1)
+                    # Check if task is cancelled or timed out
+                    if time.time() - start_time >= task_execution_timeout:
+                        raise TaskExecutionException(f"Task {task.id} execution timed out")
                 logging.info(f"Task {task.id} executed successfully")
             except Exception as e:
                 logging.error(f"Error executing task {task.id}: {str(e)}")
