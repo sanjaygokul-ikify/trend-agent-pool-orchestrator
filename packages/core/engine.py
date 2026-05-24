@@ -4,7 +4,6 @@ from typing import List, Tuple, Dict
 from .types import Agent, Task, TaskDependency
 from .exceptions import SchedulingException, InvalidTaskDependency
 
-
 dictConfig({
     'version': 1,
     'formatters': {
@@ -24,7 +23,6 @@ dictConfig({
         'handlers': ['console']
     }
 })
-
 
 class Engine:
     def __init__(self):
@@ -62,7 +60,7 @@ class Engine:
                 if agent:
                     scheduled_tasks.append((agent, task))
                 else:
-                    raise SchedulingException(f"No suitable agent found for task {task.id}")
+                    logging.warning(f"No suitable agent found for task {task.id}")
             except Exception as e:
                 logging.error(f"Error scheduling task {task.id}: {str(e)}")
         return scheduled_tasks
