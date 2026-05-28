@@ -31,26 +31,45 @@ class Engine:
         self.dependencies: Dict[str, List[str]] = {}
 
     def add_agent(self, agent: Agent) -> None:
-        self.agents.append(agent)
+        try:
+            self.agents.append(agent)
+        except Exception as e:
+            logging.error(f"Error adding agent: {str(e)}")
+            raise SchedulingException("Failed to add agent")
 
     def add_task(self, task: Task) -> None:
-        self.tasks.append(task)
+        try:
+            self.tasks.append(task)
+        except Exception as e:
+            logging.error(f"Error adding task: {str(e)}")
+            raise SchedulingException("Failed to add task")
 
     def add_dependency(self, dependency: TaskDependency) -> None:
         try:
             self.dependencies[dependency.task_id].append(dependency.dependencies)
         except KeyError:
             raise InvalidTaskDependency(f"Task {dependency.task_id} does not exist")
+        except Exception as e:
+            logging.error(f"Error adding dependency: {str(e)}")
+            raise SchedulingException("Failed to add dependency")
 
     def remove_agent(self, agent_id: str) -> None:
-        self.agents = [agent for agent in self.agents if agent.id != agent_id]
+        try:
+            self.agents = [agent for agent in self.agents if agent.id != agent_id]
+        except Exception as e:
+            logging.error(f"Error removing agent: {str(e)}")
+            raise SchedulingException("Failed to remove agent")
 
     def remove_task(self, task_id: str) -> None:
-        self.tasks = [task for task in self.tasks if task.id != task_id]
         try:
-            del self.dependencies[task_id]
-        except KeyError:
-            pass
+            self.tasks = [task for task in self.tasks if task.id != task_id]
+            try:
+                del self.dependencies[task_id]
+            except KeyError:
+                pass
+        except Exception as e:
+            logging.error(f"Error removing task: {str(e)}")
+            raise SchedulingException("Failed to remove task")
 
     def schedule(self) -> List[Tuple[Agent, Task]]:
         scheduled_tasks: List[Tuple[Agent, Task]] = []
@@ -63,10 +82,15 @@ class Engine:
                     logging.warning(f"No suitable agent found for task {task.id}")
             except Exception as e:
                 logging.error(f"Error scheduling task {task.id}: {str(e)}")
+                raise SchedulingException("Failed to schedule task")
         return scheduled_tasks
 
     def get_suitable_agent(self, task: Task) -> Agent:
-        for agent in self.agents:
-            if agent.can_handle(task):
-                return agent
-        return None
+        try:
+            for agent in self.agents:
+                if agent.can_handle(task):
+                    return agent
+            return None
+        except Exception as e:
+            logging.error(f"Error getting suitable agent for task {task.id}: {str(e)}")
+            raise SchedulingException("Failed to get suitable agent")
