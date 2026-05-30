@@ -21,6 +21,9 @@ class Executor:
                     if time.time() - start_time >= task_execution_timeout:
                         raise TaskExecutionException(f"Task {task.id} execution timed out")
                 logging.info(f"Task {task.id} executed successfully")
+            except TaskExecutionException as e:
+                logging.error(f"Error executing task {task.id}: {str(e)}")
+                raise
             except Exception as e:
                 logging.error(f"Error executing task {task.id}: {str(e)}")
                 raise TaskExecutionException(f"Task {task.id} execution failed")
