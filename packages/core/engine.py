@@ -46,7 +46,9 @@ class Engine:
 
     def add_dependency(self, dependency: TaskDependency) -> None:
         try:
-            self.dependencies[dependency.task_id].append(dependency.dependencies)
+            if dependency.task_id not in self.dependencies:
+                self.dependencies[dependency.task_id] = []
+            self.dependencies[dependency.task_id].extend(dependency.dependencies)
         except KeyError:
             raise InvalidTaskDependency(f"Task {dependency.task_id} does not exist")
         except Exception as e:
