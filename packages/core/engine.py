@@ -29,10 +29,12 @@ class Engine:
         self.agents: List[Agent] = []
         self.tasks: List[Task] = []
         self.dependencies: Dict[str, List[str]] = {}
+        self.agent_capabilities: Dict[str, List[str]] = {}
 
     def add_agent(self, agent: Agent) -> None:
         try:
             self.agents.append(agent)
+            self.agent_capabilities[agent.id] = agent.capabilities
         except Exception as e:
             logging.error(f"Error adding agent: {str(e)}")
             raise SchedulingException("Failed to add agent")
@@ -58,6 +60,8 @@ class Engine:
     def remove_agent(self, agent_id: str) -> None:
         try:
             self.agents = [agent for agent in self.agents if agent.id != agent_id]
+            if agent_id in self.agent_capabilities:
+                del self.agent_capabilities[agent_id]
         except Exception as e:
             logging.error(f"Error removing agent: {str(e)}")
             raise SchedulingException("Failed to remove agent")
