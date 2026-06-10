@@ -94,7 +94,7 @@ class Engine:
     def get_suitable_agent(self, task: Task) -> Agent:
         try:
             for agent in self.agents:
-                if agent.can_handle(task):
+                if task.requirements and agent.capabilities and all(req in agent.capabilities for req in task.requirements):
                     return agent
             return None
         except Exception as e:
