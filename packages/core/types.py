@@ -22,9 +22,7 @@ class Agent:
         self.capabilities = capabilities
 
     def can_handle(self, task: 'Task') -> bool:
-        # This is a very simplified example of the can_handle function
-        # In a real world scenario, this function would be more complex
-        return task.requirements[0] in self.capabilities
+        return task.requirements and self.capabilities and all(req in self.capabilities for req in task.requirements)
 
 class Task:
     def __init__(self, id: str, name: str, requirements: List[str], dependencies: List[str]):
