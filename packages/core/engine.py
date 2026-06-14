@@ -78,6 +78,12 @@ class Engine:
             raise SchedulingException("Failed to remove task")
 
     def schedule(self) -> List[Tuple[Agent, Task]]:
+        # Check for circular dependencies
+        for task_id, dependencies in self.dependencies.items():
+            for dependency in dependencies:
+                if dependency in self.dependencies and task_id in self.dependencies[dependency]:
+                    raise InvalidTaskDependency(f"Circular dependency detected between tasks {task_id} and {dependency}")
+
         scheduled_tasks: List[Tuple[Agent, Task]] = []
         for task in self.tasks:
             try:
