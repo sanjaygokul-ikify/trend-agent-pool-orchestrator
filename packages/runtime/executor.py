@@ -27,9 +27,16 @@ class Executor:
             except Exception as e:
                 logging.error(f"Error executing task {task.id}: {str(e)}")
                 raise TaskExecutionException(f"Task {task.id} execution failed")
-
+            
             # Introduce missing error handling for agent and task validation
             if not isinstance(agent, Agent):
                 raise ValueError(f"Invalid agent: {agent}")
             if not isinstance(task, Task):
                 raise ValueError(f"Invalid task: {task}")
+
+            try:
+                if not agent.can_handle(task):
+                    raise ValueError(f"Agent {agent.id} cannot handle task {task.id}")
+            except Exception as e:
+                logging.error(f"Error validating agent for task {task.id}: {str(e)}")
+                raise TaskExecutionException(f"Invalid agent or task configuration")
