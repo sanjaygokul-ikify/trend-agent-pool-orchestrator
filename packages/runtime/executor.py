@@ -33,10 +33,13 @@ class Executor:
                 raise ValueError(f"Invalid agent: {agent}")
             if not isinstance(task, Task):
                 raise ValueError(f"Invalid task: {task}")
-
             try:
                 if not agent.can_handle(task):
                     raise ValueError(f"Agent {agent.id} cannot handle task {task.id}")
             except Exception as e:
                 logging.error(f"Error validating agent for task {task.id}: {str(e)}")
                 raise TaskExecutionException(f"Invalid agent or task configuration")
+
+        # Add explicit type checking for the scheduled tasks
+        if not all(isinstance(pair, Tuple) and len(pair) == 2 for pair in scheduled_tasks):
+            raise ValueError("Scheduled tasks must be a list of (Agent, Task) tuples")
