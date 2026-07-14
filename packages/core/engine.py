@@ -42,6 +42,10 @@ class Engine:
     def add_task(self, task: Task) -> None:
         try:
             self.tasks.append(task)
+            if task.id in self.dependencies:
+                self.dependencies[task.id].extend(task.dependencies)
+            else:
+                self.dependencies[task.id] = task.dependencies
         except Exception as e:
             logging.error(f"Error adding task: {str(e)}")
             raise SchedulingException("Failed to add task")
