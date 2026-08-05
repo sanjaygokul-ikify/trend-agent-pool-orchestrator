@@ -43,23 +43,3 @@ class Executor:
         # Add explicit check for scheduled tasks being a list of tuples
         if not all(isinstance(pair, Tuple) and len(pair) == 2 for pair in scheduled_tasks):
             raise ValueError("Scheduled tasks must be a list of (Agent, Task) tuples")
-
-        # Handle task timeout and cancellation explicitly
-        for agent, task in scheduled_tasks:
-            try:
-                # Simulate task execution with a timeout
-                import threading
-                task_execution_thread = threading.Thread(target=self.execute_task, args=(agent, task))
-                task_execution_thread.start()
-                task_execution_thread.join(task_execution_timeout)
-                if task_execution_thread.is_alive():
-                    raise TaskExecutionException(f"Task {task.id} execution timed out")
-            except Exception as e:
-                logging.error(f"Error executing task {task.id}: {str(e)}")
-                raise TaskExecutionException(f"Task {task.id} execution failed")
-    
-    def execute_task(self, agent: Agent, task: Task) -> None:
-        # Simulate task execution
-        import time
-        time.sleep(1)
-        logging.info(f"Task {task.id} executed successfully")
